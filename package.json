@@ -1,0 +1,36 @@
+{
+  "name": "vulpes-api",
+  "version": "0.1.0",
+  "description": "API generator for the Vulpes job management framework",
+  "main": "source/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kiosked/vulpes-api.git"
+  },
+  "keywords": [
+    "vulpes",
+    "job",
+    "api"
+  ],
+  "author": "Perry Mitchell <perry@kiosked.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Kiosked/vulpes-api/issues"
+  },
+  "homepage": "https://github.com/Kiosked/vulpes-api#readme",
+  "devDependencies": {
+    "express": "^4.16.3",
+    "vulpes": "^0.8.0"
+  },
+  "peerDependencies": {
+    "express": "4.*",
+    "vulpes": "0.*"
+  },
+  "dependencies": {
+    "express-promise-router": "^3.0.3",
+    "verror": "^1.10.0"
+  }
+}
