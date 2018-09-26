@@ -4,7 +4,23 @@ const { logRequests } = require("./api/requests.js");
 const { handleError } = require("./api/errors.js");
 const { handleStatus } = require("./api/status.js");
 
-function createRoutes(router, service) {
+function createRoutes(router, service, { cors = true } => {}) {
+    // Handle CORS
+    if (cors) {
+        router.use(cors(
+            origin: true
+        ));
+    } else {
+        router.use(cors({
+            origin: false
+        }));
+    }
+    // Attach service
+    router.use((req, res, next) => {
+        req.__service = service;
+        res.set("Content-Type", "application/json");
+        next();
+    });
     // Log request info
     router.use(logRequests);
     // Setup routes

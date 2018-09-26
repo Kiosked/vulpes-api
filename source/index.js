@@ -13,10 +13,10 @@ const { DEFAULT_LOG_HANDLER, attachLogHandler } = require("./logging.js");
  * @see https://www.npmjs.com/package/express-promise-router
  * @see https://expressjs.com/en/guide/routing.html#express-router
  */
-function createVulpesAPIRouter(vulpesService, { log: DEFAULT_LOG_HANDLER } = {}) {
+function createVulpesAPIRouter(vulpesService, { cors: true, log: DEFAULT_LOG_HANDLER } = {}) {
     const router = createRouter();
     attachLogHandler(router, log);
-    createRoutes(router, vulpesService);
+    createRoutes(router, vulpesService, { cors });
     return router;
 }
 

@@ -22,14 +22,17 @@
   },
   "homepage": "https://github.com/Kiosked/vulpes-api#readme",
   "devDependencies": {
+    "apidoc": "^0.17.6",
     "express": "^4.16.3",
-    "vulpes": "^0.8.0"
+    "jsdoc-to-markdown": "^4.0.1",
+    "vulpes": "^0.10.0"
   },
   "peerDependencies": {
     "express": "4.*",
-    "vulpes": "0.*"
+    "vulpes": ">= 0.9"
   },
   "dependencies": {
+    "cors": "^2.8.4",
     "express-promise-router": "^3.0.3",
     "verror": "^1.10.0"
   }
