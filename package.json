@@ -4,7 +4,8 @@
   "description": "API generator for the Vulpes job management framework",
   "main": "source/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:api",
+    "test:api": "mocha -r test/index.js 'test/api/**/*.spec.js'"
   },
   "repository": {
     "type": "git",
@@ -21,19 +22,24 @@
     "url": "https://github.com/Kiosked/vulpes-api/issues"
   },
   "homepage": "https://github.com/Kiosked/vulpes-api#readme",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express-promise-router": "^3.0.3",
+    "verror": "^1.10.0"
+  },
   "devDependencies": {
     "apidoc": "^0.17.6",
+    "chai": "^4.1.2",
     "express": "^4.16.3",
     "jsdoc-to-markdown": "^4.0.1",
+    "mocha": "^5.2.0",
+    "ms": "^2.1.1",
+    "sinon": "^6.3.4",
+    "supertest": "^3.3.0",
     "vulpes": "^0.10.0"
   },
   "peerDependencies": {
     "express": "4.*",
     "vulpes": ">= 0.9"
-  },
-  "dependencies": {
-    "cors": "^2.8.4",
-    "express-promise-router": "^3.0.3",
-    "verror": "^1.10.0"
   }
 }

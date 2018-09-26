@@ -1,17 +1,18 @@
 const path = require("path");
 const express = require("express");
+const enableCORS = require("cors");
 const { logRequests } = require("./api/requests.js");
 const { handleError } = require("./api/errors.js");
 const { handleStatus } = require("./api/status.js");
 
-function createRoutes(router, service, { cors = true } => {}) {
+function createRoutes(router, service, { cors = true } = {}) {
     // Handle CORS
     if (cors) {
-        router.use(cors(
+        router.use(enableCORS({
             origin: true
-        ));
+        }));
     } else {
-        router.use(cors({
+        router.use(enableCORS({
             origin: false
         }));
     }
