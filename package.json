@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/Kiosked/vulpes-api#readme",
   "dependencies": {
+    "body-parser": "^1.18.3",
     "cors": "^2.8.4",
     "express-promise-router": "^3.0.3",
     "verror": "^1.10.0"

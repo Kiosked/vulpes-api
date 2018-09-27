@@ -1,12 +1,14 @@
 const path = require("path");
 const express = require("express");
 const enableCORS = require("cors");
+const bodyParser = require("body-parser");
 const { logRequests } = require("./api/requests.js");
 const { handleError } = require("./api/errors.js");
 const { handleStatus } = require("./api/status.js");
+const { handleJobCreation } = require("./api/job.js");
 
-function createRoutes(router, service, { cors = true } = {}) {
-    // Handle CORS
+function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
+    // Initialisation
     if (cors) {
         router.use(enableCORS({
             origin: true
@@ -15,6 +17,9 @@ function createRoutes(router, service, { cors = true } = {}) {
         router.use(enableCORS({
             origin: false
         }));
+    }
+    if (parseJSON) {
+        router.use(bodyParser.json());
     }
     // Attach service
     router.use((req, res, next) => {
@@ -26,7 +31,7 @@ function createRoutes(router, service, { cors = true } = {}) {
     router.use(logRequests);
     // Setup routes
     router.route("/status").get(handleStatus);
-    // router.route("/job").post(handleJobCreation);
+    router.route("/job").post(handleJobCreation);
     // router.route("/jobs").post(handleJobsCreation);
     // router.route("/job/:jobid").get(handleJobFetch);
     // router.route("/job/:jobid/reset").get(handleJobReset);
