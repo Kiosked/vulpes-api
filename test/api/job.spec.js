@@ -33,11 +33,8 @@ describe("/job", function() {
                 .set("Accept", "application/json")
                 .expect(200)
                 .then(response => {
-                    expect(response.body).to.have.property("jobID").that.matches(UUID_REXP);
-                    return this.service.getJob(response.body.jobID);
-                })
-                .then(job => {
-                    expect(job).to.be.an("object");
+                    expect(response.body).to.have.property("job").that.is.an("object");
+                    const { job } = response.body;
                     expect(job).to.have.property("type", "test1");
                     expect(job).to.have.property("data").that.deep.equals({
                         value: 42,

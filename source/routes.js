@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const { logRequests } = require("./api/requests.js");
 const { handleError } = require("./api/errors.js");
 const { handleStatus } = require("./api/status.js");
-const { handleJobCreation } = require("./api/job.js");
+const { handleJobCreation, handleJobsCreation } = require("./api/job.js");
 
 function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
     // Initialisation
@@ -32,7 +32,7 @@ function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
     // Setup routes
     router.route("/status").get(handleStatus);
     router.route("/job").post(handleJobCreation);
-    // router.route("/jobs").post(handleJobsCreation);
+    router.route("/jobs").post(handleJobsCreation);
     // router.route("/job/:jobid").get(handleJobFetch);
     // router.route("/job/:jobid/reset").get(handleJobReset);
     // router
