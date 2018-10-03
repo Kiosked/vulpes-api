@@ -15,6 +15,10 @@ function handleError(err, req, res /*, next */) {
     // Reset content type for error
     res.set("Content-Type", "text/plain");
     switch (code) {
+        case "vuples/error/job/result/succeeded":
+            return outputError(409, "Conflict", "Job has already been completed");
+        case "vuples/error/job/status":
+            return outputError(409, "Conflict", "Job not in correct state for this request");
         case "vulpes/error/job-batch/dep-res":
             return outputError(400, "Bad Request", "Job batch dependencies could not be resolved");
         case "vulpes/error/job-batch/ids":
@@ -24,7 +28,11 @@ function handleError(err, req, res /*, next */) {
         case "vulpes/error/job-batch/parent-res":
             return outputError(400, "Bad Request", "Job batch parent IDs were not resolveable");
         case "ERR_JOB_DATA_INVALID":
-            return outputError(400, "Bad Request", "Request failed due to invalid job payload");
+            return outputError(400, "Bad Request", "Invalid job payload");
+        case "ERR_JOB_ID_INVALID":
+            return outputError(400, "Bad Request", "Provided job ID was invalid");
+        case "ERR_JOB_NOT_FOUND":
+            return outputError(404, "Not Found", "No job found");
         default:
             log.warn(
                 {

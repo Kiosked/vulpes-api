@@ -60,7 +60,64 @@ function handleJobsCreation(req, res) {
         });
 }
 
+function handleJobFetch(req, res) {
+    const { __service: service } = req;
+    const log = getLog(req);
+    return Promise.resolve()
+        .then(() => {
+            const { jobid: jobID } = req.params;
+            if (!jobID || typeof jobID !== "string") {
+                throw new VError(
+                    { info: { code: "ERR_JOB_ID_INVALID" } },
+                    "Invalid job ID for job data request"
+                );
+            }
+            log.info({ jobID }, "Fetching job");
+            return service.getJob(jobID);
+        })
+        .then(job => {
+            if (!job) {
+                const { jobid: jobID } = req.params;
+                log.info({ jobID }, "No job found for ID");
+                throw new VError(
+                    { info: { code: "ERR_JOB_NOT_FOUND" } },
+                    `No job found for ID: ${jobID}`
+                );
+            }
+            res.send(
+                JSON.stringify({
+                    job
+                })
+            );
+        });
+}
+
+function handleJobReset(req, res) {
+    const { __service: service } = req;
+    const log = getLog(req);
+    return Promise.resolve()
+        .then(() => {
+            const { jobid: jobID } = req.params;
+            if (!jobID || typeof jobID !== "string") {
+                throw new VError(
+                    { info: { code: "ERR_JOB_ID_INVALID" } },
+                    "Invalid job ID for job reset request"
+                );
+            }
+            log.info({ jobID }, "Resetting job");
+            return service
+                .resetJob(jobID)
+                .then(() => jobID);
+        })
+        .then(jobID => {
+            log.info({ jobID }, "Reset job");
+            res.send(JSON.stringify({ jobID }));
+        });
+}
+
 module.exports = {
     handleJobCreation,
-    handleJobsCreation
+    handleJobsCreation,
+    handleJobFetch,
+    handleJobReset
 };
