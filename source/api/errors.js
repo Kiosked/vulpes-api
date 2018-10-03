@@ -15,6 +15,8 @@ function handleError(err, req, res /*, next */) {
     // Reset content type for error
     res.set("Content-Type", "text/plain");
     switch (code) {
+        case "vuples/error/job/result":
+            return outputError(400, "Bad Request", "Job result type was invalid");
         case "vuples/error/job/result/succeeded":
             return outputError(409, "Conflict", "Job has already been completed");
         case "vuples/error/job/status":

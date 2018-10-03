@@ -113,35 +113,117 @@ describe("/job/:jobid/reset", function() {
         this.service.shutdown();
     });
 
-    it("resets job statuses", function() {
-        return this.service.stopJob(this.jobID, Service.JobResult.Failure)
-            .then(() => request(createApp(this.service))
+    describe("GET", function() {
+        it("resets job statuses", function() {
+            return this.service.stopJob(this.jobID, Service.JobResult.Failure)
+                .then(() => request(createApp(this.service))
+                    .get(`/job/${this.jobID}/reset`)
+                    .set("Accept", "application/json")
+                    .expect(200)
+                )
+                .then(response => {
+                    expect(response.body).to.have.property("jobID").that.equals(this.jobID);
+                    return this.service.getJob(this.jobID);
+                })
+                .then(job => {
+                    expect(job.status).to.equal(Service.JobStatus.Pending);
+                });
+        });
+
+        it("returns 409 if job not stopped", function() {
+            return request(createApp(this.service))
                 .get(`/job/${this.jobID}/reset`)
                 .set("Accept", "application/json")
-                .expect(200)
-            )
-            .then(response => {
-                expect(response.body).to.have.property("jobID").that.equals(this.jobID);
-                return this.service.getJob(this.jobID);
-            })
-            .then(job => {
-                expect(job.status).to.equal(Service.JobStatus.Pending);
+                .expect(409);
+        });
+
+        it("returns 409 if job has succeeded", function() {
+            return this.service.stopJob(this.jobID, Service.JobResult.Success)
+                .then(() => request(createApp(this.service))
+                    .get(`/job/${this.jobID}/reset`)
+                    .set("Accept", "application/json")
+                    .expect(409)
+                );
+        });
+    });
+});
+
+describe("/job/:jobid/result", function() {
+    beforeEach(function() {
+        this.service = new Service();
+        return this.service
+            .initialise()
+            .then(() => this.service.addJob({
+                type: "testjob",
+                data: {
+                    preExisting: 0
+                }
+            }))
+            .then(jobID => {
+                this.jobID = jobID;
+                return this.service.startJob(this.jobID);
             });
     });
 
-    it("returns 409 if job not stopped", function() {
-        return request(createApp(this.service))
-            .get(`/job/${this.jobID}/reset`)
-            .set("Accept", "application/json")
-            .expect(409);
+    afterEach(function() {
+        this.service.shutdown();
     });
 
-    it("returns 409 if job has succeeded", function() {
-        return this.service.stopJob(this.jobID, Service.JobResult.Success)
-            .then(() => request(createApp(this.service))
-                .get(`/job/${this.jobID}/reset`)
+    describe("PUT", function() {
+        it("stops jobs and applies results", function() {
+            return request(createApp(this.service))
+                .put(`/job/${this.jobID}/result`)
+                .send({
+                    type: Service.JobResult.Success,
+                    data: {
+                        value: 42
+                    }
+                })
                 .set("Accept", "application/json")
-                .expect(409)
-            );
+                .expect(200)
+                .then(response => {
+                    expect(response.body).to.have.property("jobID", this.jobID);
+                    return this.service.getJob(this.jobID);
+                })
+                .then(job => {
+                    expect(job.status).to.equal(Service.JobStatus.Stopped);
+                    expect(job.result.type).to.equal(Service.JobResult.Success);
+                    expect(job.result.data).to.deep.equal({
+                        preExisting: 0,
+                        value: 42
+                    });
+                });
+        });
+
+        it("returns 400 when no data is sent", function() {
+            return request(createApp(this.service))
+                .put(`/job/${this.jobID}/result`)
+                .set("Accept", "application/json")
+                .expect(400);
+        });
+
+        it("returns 409 if job has already succeeded", function() {
+            return this.service.stopJob(this.jobID, Service.JobResult.Success)
+                .then(() => request(createApp(this.service))
+                    .put(`/job/${this.jobID}/result`)
+                    .send({
+                        type: Service.JobResult.Failure
+                    })
+                    .set("Accept", "application/json")
+                    .expect(409)
+                );
+        });
+
+        it("returns 409 if job has already failed", function() {
+            return this.service.stopJob(this.jobID, Service.JobResult.Failure)
+                .then(() => request(createApp(this.service))
+                    .put(`/job/${this.jobID}/result`)
+                    .send({
+                        type: Service.JobResult.Success
+                    })
+                    .set("Accept", "application/json")
+                    .expect(409)
+                );
+        });
     });
 });

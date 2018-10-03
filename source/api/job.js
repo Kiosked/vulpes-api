@@ -115,9 +115,31 @@ function handleJobReset(req, res) {
         });
 }
 
+function handleJobResult(req, res) {
+    const { __service: service } = req;
+    const log = getLog(req);
+    return Promise.resolve()
+        .then(() => {
+            const { jobid: jobID } = req.params;
+            const { type, data } = req.body;
+            log.info({ jobID, resultType: type, resultData: data }, "Applying job result");
+            return service.stopJob(jobID, type, data);
+        })
+        .then(() => {
+            const { jobid: jobID } = req.params;
+            log.info({ jobID }, "Applied job result");
+            res.send(
+                JSON.stringify({
+                    jobID
+                })
+            );
+        });
+}
+
 module.exports = {
     handleJobCreation,
     handleJobsCreation,
     handleJobFetch,
-    handleJobReset
+    handleJobReset,
+    handleJobResult
 };
