@@ -227,3 +227,51 @@ describe("/job/:jobid/result", function() {
         });
     });
 });
+
+describe("/work", function() {
+    beforeEach(function() {
+        this.service = new Service();
+        return this.service
+            .initialise()
+            .then(() => this.service.addJob({
+                type: "testjob"
+            }))
+            .then(jobID => {
+                this.jobID = jobID;
+            });
+    });
+
+    afterEach(function() {
+        this.service.shutdown();
+    });
+
+    describe("GET", function() {
+        it("returns a started job", function() {
+            return request(createApp(this.service))
+                .get("/work")
+                .set("Accept", "application/json")
+                .expect(200)
+                .then(response => {
+                    expect(response.body).to.have.property("job").that.is.an("object");
+                    const { job } = response.body;
+                    expect(job).to.have.property("status", Service.JobStatus.Running);
+                    return this.service.getJob(this.jobID);
+                })
+                .then(job => {
+                    expect(job.status).to.equal(Service.JobStatus.Running);
+                });
+        });
+
+        it("returns null when no job can be started", function() {
+            return this.service.startJob(this.jobID)
+                .then(() =>  request(createApp(this.service))
+                    .get("/work")
+                    .set("Accept", "application/json")
+                    .expect(200)
+                )
+                .then(response => {
+                    expect(response.body).to.have.property("job", null);
+                });
+        });
+    });
+});

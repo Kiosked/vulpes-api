@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const { logRequests } = require("./api/requests.js");
 const { handleError } = require("./api/errors.js");
 const { handleStatus } = require("./api/status.js");
-const { handleJobCreation, handleJobsCreation, handleJobFetch, handleJobReset, handleJobResult } = require("./api/job.js");
+const { handleJobCreation, handleJobsCreation, handleJobFetch, handleJobReset, handleJobResult, handleNextJob } = require("./api/job.js");
 const { handleJobTreeFetch } = require("./api/jobTree.js");
 const { handleJobsQuery } = require("./api/query.js");
 
@@ -40,7 +40,7 @@ function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
     router.route("/job/:jobid/result").put(handleJobResult);
     router.route("/job-tree/:jobid").get(handleJobTreeFetch);
     router.route("/query/jobs").post(handleJobsQuery);
-    // router.route("/work").get(handleNextJob);
+    router.route("/work").get(handleNextJob);
     // Attach error handler
     router.use((err, req, res, next) => handleError(err, req, res, next));
 }

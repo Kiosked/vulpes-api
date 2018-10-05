@@ -136,10 +136,33 @@ function handleJobResult(req, res) {
         });
 }
 
+function handleNextJob(req, res) {
+    const { __service: service } = req;
+    const log = getLog(req);
+    return Promise.resolve()
+        .then(() => {
+            log.info("Fetching work");
+            return service.startJob();
+        })
+        .then(nextJob => {
+            if (nextJob === null) {
+                log.info("No job available to start");
+            } else {
+                log.info({ jobID: nextJob.id }, "Started work on job");
+            }
+            res.send(
+                JSON.stringify({
+                    job: nextJob || null
+                })
+            );
+        });
+}
+
 module.exports = {
     handleJobCreation,
     handleJobsCreation,
     handleJobFetch,
     handleJobReset,
-    handleJobResult
+    handleJobResult,
+    handleNextJob
 };
