@@ -26,7 +26,8 @@ describe("/status", function() {
                 .expect(200)
                 .then(response => {
                     expect(response.body).to.have.property("status", "ok");
-                    expect(response.body).to.have.property("started")
+                    expect(response.body)
+                        .to.have.property("started")
                         .that.is.a("number")
                         .and.is.above(earlierTime);
                     expect(response.body).to.have.property("api", pkgInfo.version);
@@ -49,7 +50,8 @@ describe("/status", function() {
                 .expect(200)
                 .then(response => {
                     expect(response.body).to.have.property("status", "offline");
-                    expect(response.body).to.have.property("started")
+                    expect(response.body)
+                        .to.have.property("started")
                         .that.is.a("number")
                         .and.is.above(earlierTime);
                     expect(response.body).to.have.property("api", pkgInfo.version);
@@ -66,7 +68,8 @@ describe("/status", function() {
                 .expect(200)
                 .then(response => {
                     expect(response.body).to.have.property("status", "init");
-                    expect(response.body).to.have.property("started")
+                    expect(response.body)
+                        .to.have.property("started")
                         .that.is.a("number")
                         .and.is.above(earlierTime);
                     expect(response.body).to.have.property("api", pkgInfo.version);

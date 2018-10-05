@@ -8,6 +8,6 @@ function createApp(service) {
     return app;
 }
 
-module.exports =  {
+module.exports = {
     createApp
 };

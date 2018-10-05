@@ -12,12 +12,14 @@ describe("/query/jobs", function() {
         this.service = new Service();
         return this.service
             .initialise()
-            .then(() => this.service.addJobs([
-                { id: 1, type: "parent1" },
-                { id: 2, type: "parent2" },
-                { id: 3, parents: [1, 2], type: "target" },
-                { id: 4, parents: [3], type: "child" }
-            ]))
+            .then(() =>
+                this.service.addJobs([
+                    { id: 1, type: "parent1" },
+                    { id: 2, type: "parent2" },
+                    { id: 3, parents: [1, 2], type: "target" },
+                    { id: 4, parents: [3], type: "child" }
+                ])
+            )
             .then(jobs => {
                 this.jobs = jobs;
                 this.targetID = jobs.find(job => job.type === "target").id;
@@ -41,7 +43,9 @@ describe("/query/jobs", function() {
                 .set("Accept", "application/json")
                 .expect(200)
                 .then(response => {
-                    expect(response.body).to.have.property("jobs").that.is.an("array");
+                    expect(response.body)
+                        .to.have.property("jobs")
+                        .that.is.an("array");
                     const { jobs } = response.body;
                     expect(jobs).to.have.lengthOf(1);
                 });

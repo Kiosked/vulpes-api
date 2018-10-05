@@ -5,10 +5,13 @@ function handleError(err, req, res /*, next */) {
     const { code = null } = VError.info(err);
     const log = getLog(req);
     const outputError = (statusCode, status, message) => {
-        log.warn({
-            status: statusCode,
-            code
-        }, message);
+        log.warn(
+            {
+                status: statusCode,
+                code
+            },
+            message
+        );
         log.warn(err);
         res.status(statusCode).send(status);
     };

@@ -24,9 +24,7 @@ function handleJobCreation(req, res) {
                 },
                 "Added job"
             );
-            res.send(
-                JSON.stringify({ job })
-            );
+            res.send(JSON.stringify({ job }));
         });
 }
 
@@ -105,9 +103,7 @@ function handleJobReset(req, res) {
                 );
             }
             log.info({ jobID }, "Resetting job");
-            return service
-                .resetJob(jobID)
-                .then(() => jobID);
+            return service.resetJob(jobID).then(() => jobID);
         })
         .then(jobID => {
             log.info({ jobID }, "Reset job");

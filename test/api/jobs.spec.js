@@ -21,19 +21,22 @@ describe("/jobs", function() {
             return request(createApp(this.service))
                 .post("/jobs")
                 .send({
-                    jobs: [
-                        { id: 1, type: "jobtype1" },
-                        { id: 2, type: "jobtype2" }
-                    ]
+                    jobs: [{ id: 1, type: "jobtype1" }, { id: 2, type: "jobtype2" }]
                 })
                 .set("Content-Type", "application/json")
                 .set("Accept", "application/json")
                 .expect(200)
                 .then(response => {
-                    expect(response.body).to.have.property("jobs").that.is.an("array");
+                    expect(response.body)
+                        .to.have.property("jobs")
+                        .that.is.an("array");
                     const { jobs } = response.body;
-                    expect(jobs.find(job => job.type === "jobtype1")).to.have.property("id").that.matches(UUID_REXP);
-                    expect(jobs.find(job => job.type === "jobtype2")).to.have.property("id").that.matches(UUID_REXP);
+                    expect(jobs.find(job => job.type === "jobtype1"))
+                        .to.have.property("id")
+                        .that.matches(UUID_REXP);
+                    expect(jobs.find(job => job.type === "jobtype2"))
+                        .to.have.property("id")
+                        .that.matches(UUID_REXP);
                 });
         });
 
@@ -50,10 +53,7 @@ describe("/jobs", function() {
             return request(createApp(this.service))
                 .post("/jobs")
                 .send({
-                    jobs: [
-                        { type: "jobtype1" },
-                        { type: "jobtype2" }
-                    ]
+                    jobs: [{ type: "jobtype1" }, { type: "jobtype2" }]
                 })
                 .set("Content-Type", "application/json")
                 .set("Accept", "application/json")

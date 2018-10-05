@@ -34,13 +34,17 @@ describe("/job", function() {
                 .set("Accept", "application/json")
                 .expect(200)
                 .then(response => {
-                    expect(response.body).to.have.property("job").that.is.an("object");
+                    expect(response.body)
+                        .to.have.property("job")
+                        .that.is.an("object");
                     const { job } = response.body;
                     expect(job).to.have.property("type", "test1");
-                    expect(job).to.have.property("data").that.deep.equals({
-                        value: 42,
-                        reason: "because"
-                    });
+                    expect(job)
+                        .to.have.property("data")
+                        .that.deep.equals({
+                            value: 42,
+                            reason: "because"
+                        });
                 });
         });
 
@@ -60,9 +64,11 @@ describe("/job/:id", function() {
         this.service = new Service();
         return this.service
             .initialise()
-            .then(() => this.service.addJob({
-                type: "testjob"
-            }))
+            .then(() =>
+                this.service.addJob({
+                    type: "testjob"
+                })
+            )
             .then(jobID => {
                 this.jobID = jobID;
             });
@@ -79,7 +85,9 @@ describe("/job/:id", function() {
                 .set("Accept", "application/json")
                 .expect(200)
                 .then(response => {
-                    expect(response.body).to.have.property("job").that.is.an("object");
+                    expect(response.body)
+                        .to.have.property("job")
+                        .that.is.an("object");
                     const { job } = response.body;
                     expect(job).to.have.property("id", this.jobID);
                     expect(job).to.have.property("type", "testjob");
@@ -100,9 +108,11 @@ describe("/job/:jobid/reset", function() {
         this.service = new Service();
         return this.service
             .initialise()
-            .then(() => this.service.addJob({
-                type: "testjob"
-            }))
+            .then(() =>
+                this.service.addJob({
+                    type: "testjob"
+                })
+            )
             .then(jobID => {
                 this.jobID = jobID;
                 return this.service.startJob(this.jobID);
@@ -115,14 +125,18 @@ describe("/job/:jobid/reset", function() {
 
     describe("GET", function() {
         it("resets job statuses", function() {
-            return this.service.stopJob(this.jobID, Service.JobResult.Failure)
-                .then(() => request(createApp(this.service))
-                    .get(`/job/${this.jobID}/reset`)
-                    .set("Accept", "application/json")
-                    .expect(200)
+            return this.service
+                .stopJob(this.jobID, Service.JobResult.Failure)
+                .then(() =>
+                    request(createApp(this.service))
+                        .get(`/job/${this.jobID}/reset`)
+                        .set("Accept", "application/json")
+                        .expect(200)
                 )
                 .then(response => {
-                    expect(response.body).to.have.property("jobID").that.equals(this.jobID);
+                    expect(response.body)
+                        .to.have.property("jobID")
+                        .that.equals(this.jobID);
                     return this.service.getJob(this.jobID);
                 })
                 .then(job => {
@@ -138,12 +152,12 @@ describe("/job/:jobid/reset", function() {
         });
 
         it("returns 409 if job has succeeded", function() {
-            return this.service.stopJob(this.jobID, Service.JobResult.Success)
-                .then(() => request(createApp(this.service))
+            return this.service.stopJob(this.jobID, Service.JobResult.Success).then(() =>
+                request(createApp(this.service))
                     .get(`/job/${this.jobID}/reset`)
                     .set("Accept", "application/json")
                     .expect(409)
-                );
+            );
         });
     });
 });
@@ -153,12 +167,14 @@ describe("/job/:jobid/result", function() {
         this.service = new Service();
         return this.service
             .initialise()
-            .then(() => this.service.addJob({
-                type: "testjob",
-                data: {
-                    preExisting: 0
-                }
-            }))
+            .then(() =>
+                this.service.addJob({
+                    type: "testjob",
+                    data: {
+                        preExisting: 0
+                    }
+                })
+            )
             .then(jobID => {
                 this.jobID = jobID;
                 return this.service.startJob(this.jobID);
@@ -203,27 +219,27 @@ describe("/job/:jobid/result", function() {
         });
 
         it("returns 409 if job has already succeeded", function() {
-            return this.service.stopJob(this.jobID, Service.JobResult.Success)
-                .then(() => request(createApp(this.service))
+            return this.service.stopJob(this.jobID, Service.JobResult.Success).then(() =>
+                request(createApp(this.service))
                     .put(`/job/${this.jobID}/result`)
                     .send({
                         type: Service.JobResult.Failure
                     })
                     .set("Accept", "application/json")
                     .expect(409)
-                );
+            );
         });
 
         it("returns 409 if job has already failed", function() {
-            return this.service.stopJob(this.jobID, Service.JobResult.Failure)
-                .then(() => request(createApp(this.service))
+            return this.service.stopJob(this.jobID, Service.JobResult.Failure).then(() =>
+                request(createApp(this.service))
                     .put(`/job/${this.jobID}/result`)
                     .send({
                         type: Service.JobResult.Success
                     })
                     .set("Accept", "application/json")
                     .expect(409)
-                );
+            );
         });
     });
 });
@@ -233,9 +249,11 @@ describe("/work", function() {
         this.service = new Service();
         return this.service
             .initialise()
-            .then(() => this.service.addJob({
-                type: "testjob"
-            }))
+            .then(() =>
+                this.service.addJob({
+                    type: "testjob"
+                })
+            )
             .then(jobID => {
                 this.jobID = jobID;
             });
@@ -252,7 +270,9 @@ describe("/work", function() {
                 .set("Accept", "application/json")
                 .expect(200)
                 .then(response => {
-                    expect(response.body).to.have.property("job").that.is.an("object");
+                    expect(response.body)
+                        .to.have.property("job")
+                        .that.is.an("object");
                     const { job } = response.body;
                     expect(job).to.have.property("status", Service.JobStatus.Running);
                     return this.service.getJob(this.jobID);
@@ -263,11 +283,13 @@ describe("/work", function() {
         });
 
         it("returns null when no job can be started", function() {
-            return this.service.startJob(this.jobID)
-                .then(() =>  request(createApp(this.service))
-                    .get("/work")
-                    .set("Accept", "application/json")
-                    .expect(200)
+            return this.service
+                .startJob(this.jobID)
+                .then(() =>
+                    request(createApp(this.service))
+                        .get("/work")
+                        .set("Accept", "application/json")
+                        .expect(200)
                 )
                 .then(response => {
                     expect(response.body).to.have.property("job", null);

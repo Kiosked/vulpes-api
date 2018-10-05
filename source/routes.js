@@ -5,20 +5,31 @@ const bodyParser = require("body-parser");
 const { logRequests } = require("./api/requests.js");
 const { handleError } = require("./api/errors.js");
 const { handleStatus } = require("./api/status.js");
-const { handleJobCreation, handleJobsCreation, handleJobFetch, handleJobReset, handleJobResult, handleNextJob } = require("./api/job.js");
+const {
+    handleJobCreation,
+    handleJobsCreation,
+    handleJobFetch,
+    handleJobReset,
+    handleJobResult,
+    handleNextJob
+} = require("./api/job.js");
 const { handleJobTreeFetch } = require("./api/jobTree.js");
 const { handleJobsQuery } = require("./api/query.js");
 
 function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
     // Initialisation
     if (cors) {
-        router.use(enableCORS({
-            origin: true
-        }));
+        router.use(
+            enableCORS({
+                origin: true
+            })
+        );
     } else {
-        router.use(enableCORS({
-            origin: false
-        }));
+        router.use(
+            enableCORS({
+                origin: false
+            })
+        );
     }
     if (parseJSON) {
         router.use(bodyParser.json());

@@ -10,11 +10,13 @@ function handleStatus(req, res) {
     } else if (service.alive && !service.initialised) {
         status = "init";
     }
-    res.send(JSON.stringify({
-        status,
-        api: pkgInfo.version,
-        started: STARTED
-    }));
+    res.send(
+        JSON.stringify({
+            status,
+            api: pkgInfo.version,
+            started: STARTED
+        })
+    );
 }
 
 module.exports = {
