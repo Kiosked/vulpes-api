@@ -14,10 +14,10 @@ describe("/query/jobs", function() {
             .initialise()
             .then(() =>
                 this.service.addJobs([
-                    { id: 1, type: "parent1" },
-                    { id: 2, type: "parent2" },
-                    { id: 3, parents: [1, 2], type: "target" },
-                    { id: 4, parents: [3], type: "child" }
+                    { id: 1, type: "parent1", data: { name: "zane" } },
+                    { id: 2, type: "parent2", data: { name: "arthur" } },
+                    { id: 3, parents: [1, 2], type: "target", data: { name: "jerome" } },
+                    { id: 4, parents: [3], type: "child", data: { name: "ezra" } }
                 ])
             )
             .then(jobs => {
@@ -71,6 +71,66 @@ describe("/query/jobs", function() {
                     expect(jobs).to.have.lengthOf(2);
                     expect(jobs.find(job => job.type === "parent1")).to.be.an("object");
                     expect(jobs.find(job => job.type === "parent2")).to.be.an("object");
+                });
+        });
+
+        it("supports limiting results", function() {
+            return request(createApp(this.service))
+                .post("/query/jobs")
+                .send({
+                    query: {},
+                    options: {
+                        limit: 2
+                    }
+                })
+                .set("Content-Type", "application/json")
+                .set("Accept", "application/json")
+                .expect(200)
+                .then(response => {
+                    const { jobs } = response.body;
+                    expect(jobs).to.have.lengthOf(2);
+                });
+        });
+
+        it("supports sorting results (asc)", function() {
+            return request(createApp(this.service))
+                .post("/query/jobs")
+                .send({
+                    query: {},
+                    options: {
+                        sort: "type",
+                        order: "asc"
+                    }
+                })
+                .set("Content-Type", "application/json")
+                .set("Accept", "application/json")
+                .expect(200)
+                .then(response => {
+                    const { jobs } = response.body;
+                    expect(jobs.map(job => job.type).join(",")).to.equal(
+                        "child,parent1,parent2,target"
+                    );
+                });
+        });
+
+        it("supports sorting results (desc)", function() {
+            return request(createApp(this.service))
+                .post("/query/jobs")
+                .send({
+                    query: {},
+                    options: {
+                        sort: "type",
+                        order: "desc"
+                    }
+                })
+                .set("Content-Type", "application/json")
+                .set("Accept", "application/json")
+                .expect(200)
+                .then(response => {
+                    const { jobs } = response.body;
+                    expect(jobs.map(job => job.type).join(",")).to.equal(
+                        "target,parent2,parent1,child"
+                    );
                 });
         });
     });
