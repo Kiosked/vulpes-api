@@ -1,5 +1,10 @@
 # Vulpes-API Changelog
 
+## v0.2.0
+_2018-10-13_
+
+ * Add query options to jobs API query
+
 ## v0.1.0
 _2018-10-05_
 
