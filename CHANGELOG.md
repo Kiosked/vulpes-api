@@ -1,5 +1,10 @@
 # Vulpes-API Changelog
 
+## v0.2.1
+_2019-03-01_
+
+ * Update dependencies
+
 ## v0.2.0
 _2018-10-13_
 
