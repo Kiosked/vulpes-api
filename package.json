@@ -1,6 +1,6 @@
 {
   "name": "vulpes-api",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "API generator for the Vulpes job management framework",
   "main": "source/index.js",
   "scripts": {
