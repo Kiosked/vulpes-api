@@ -1,5 +1,10 @@
 # Vulpes-API Changelog
 
+## v0.2.2
+_2019-03-01_
+
+ * Update vulpes for babel-polyfill issue
+
 ## v0.2.1
 _2019-03-01_
 
