@@ -1,5 +1,10 @@
 # Vulpes-API Changelog
 
+## v0.2.3
+_2019-04-04_
+
+ * Raise JSON body limit to 10MB
+
 ## v0.2.2
 _2019-03-01_
 
