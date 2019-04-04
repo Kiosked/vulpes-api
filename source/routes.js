@@ -32,7 +32,11 @@ function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
         );
     }
     if (parseJSON) {
-        router.use(bodyParser.json());
+        router.use(
+            bodyParser.json({
+                limit: "10MB"
+            })
+        );
     }
     // Attach service
     router.use((req, res, next) => {
