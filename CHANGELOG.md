@@ -1,5 +1,10 @@
 # Vulpes-API Changelog
 
+## v0.3.0
+_2019-04-05_
+
+ * Job result update (progress support)
+
 ## v0.2.4
 _2019-04-04_
 
