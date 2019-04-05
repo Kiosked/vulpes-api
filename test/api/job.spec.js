@@ -242,6 +242,40 @@ describe("/job/:jobid/result", function() {
             );
         });
     });
+
+    describe("PATCH", function() {
+        it("supports updating progress", function() {
+            return request(createApp(this.service))
+                .patch(`/job/${this.jobID}/result`)
+                .send({
+                    data: {
+                        "%progressCurrent": 5,
+                        "%progressMax": 103
+                    }
+                })
+                .set("Accept", "application/json")
+                .expect(200)
+                .then(response => {
+                    expect(response.body).to.have.property("jobID", this.jobID);
+                    return this.service.getJob(this.jobID);
+                })
+                .then(job => {
+                    expect(job.status).to.equal(Service.JobStatus.Running);
+                    expect(job.result.type).to.be.null;
+                    expect(job.result.data).to.deep.equal({
+                        "%progressCurrent": 5,
+                        "%progressMax": 103
+                    });
+                });
+        });
+
+        it("returns 400 when no data is sent", function() {
+            return request(createApp(this.service))
+                .patch(`/job/${this.jobID}/result`)
+                .set("Accept", "application/json")
+                .expect(400);
+        });
+    });
 });
 
 describe("/work", function() {

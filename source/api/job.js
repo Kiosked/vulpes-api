@@ -132,6 +132,33 @@ function handleJobResult(req, res) {
         });
 }
 
+function handleJobResultUpdate(req, res) {
+    const { __service: service } = req;
+    const log = getLog(req);
+    return Promise.resolve()
+        .then(() => {
+            const { jobid: jobID } = req.params;
+            const { data } = req.body;
+            if (!data) {
+                throw new VError(
+                    { info: { code: "ERR_JOB_RESULT_DATA_INVALID" } },
+                    "Invalid job result data for job result update"
+                );
+            }
+            log.info({ jobID, resultData: data }, "Updating job result");
+            return service.updateJob(jobID, { result: { data } });
+        })
+        .then(() => {
+            const { jobid: jobID } = req.params;
+            log.info({ jobID }, "Updated job result");
+            res.send(
+                JSON.stringify({
+                    jobID
+                })
+            );
+        });
+}
+
 function handleNextJob(req, res) {
     const { __service: service } = req;
     const log = getLog(req);
@@ -160,5 +187,6 @@ module.exports = {
     handleJobFetch,
     handleJobReset,
     handleJobResult,
+    handleJobResultUpdate,
     handleNextJob
 };

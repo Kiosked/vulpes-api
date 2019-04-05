@@ -11,6 +11,7 @@ const {
     handleJobFetch,
     handleJobReset,
     handleJobResult,
+    handleJobResultUpdate,
     handleNextJob
 } = require("./api/job.js");
 const { handleJobTreeFetch } = require("./api/jobTree.js");
@@ -34,7 +35,7 @@ function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
     if (parseJSON) {
         router.use(
             bodyParser.json({
-                limit: "10MB"
+                limit: "100mb"
             })
         );
     }
@@ -52,7 +53,10 @@ function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
     router.route("/jobs").post(handleJobsCreation);
     router.route("/job/:jobid").get(handleJobFetch);
     router.route("/job/:jobid/reset").get(handleJobReset);
-    router.route("/job/:jobid/result").put(handleJobResult);
+    router
+        .route("/job/:jobid/result")
+        .put(handleJobResult)
+        .patch(handleJobResultUpdate);
     router.route("/job-tree/:jobid").get(handleJobTreeFetch);
     router.route("/query/jobs").post(handleJobsQuery);
     router.route("/work").get(handleNextJob);

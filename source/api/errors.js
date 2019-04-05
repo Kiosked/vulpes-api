@@ -34,6 +34,8 @@ function handleError(err, req, res /*, next */) {
             return outputError(400, "Bad Request", "Job batch parent IDs were not resolveable");
         case "ERR_JOB_DATA_INVALID":
             return outputError(400, "Bad Request", "Invalid job payload");
+        case "ERR_JOB_RESULT_DATA_INVALID":
+            return outputError(400, "Bad Request", "Invalid job result update payload");
         case "ERR_JOB_ID_INVALID":
             return outputError(400, "Bad Request", "Provided job ID was invalid");
         case "ERR_JOB_NOT_FOUND":
