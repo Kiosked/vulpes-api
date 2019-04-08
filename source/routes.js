@@ -60,6 +60,14 @@ function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
     router.route("/job-tree/:jobid").get(handleJobTreeFetch);
     router.route("/query/jobs").post(handleJobsQuery);
     router.route("/work").get(handleNextJob);
+    // Misc
+    router.route("/time").get((req, res) => {
+        res.send(
+            JSON.stringify({
+                time: Date.now()
+            })
+        );
+    });
     // Attach error handler
     router.use((err, req, res, next) => handleError(err, req, res, next));
 }
