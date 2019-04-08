@@ -1,5 +1,10 @@
 # Vulpes-API Changelog
 
+## v0.4.0
+_2019-04-08_
+
+ * Service time route
+
 ## v0.3.0
 _2019-04-05_
 
