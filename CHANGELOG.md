@@ -1,5 +1,10 @@
 # Vulpes-API Changelog
 
+## v0.5.0
+_2019-04-08_
+
+ * Worker registration
+
 ## v0.4.0
 _2019-04-08_
 
