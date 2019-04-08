@@ -16,6 +16,7 @@ const {
 } = require("./api/job.js");
 const { handleJobTreeFetch } = require("./api/jobTree.js");
 const { handleJobsQuery } = require("./api/query.js");
+const { handleWorkerRegistration } = require("./api/worker.js");
 
 function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
     // Initialisation
@@ -60,6 +61,7 @@ function createRoutes(router, service, { cors = true, parseJSON = true } = {}) {
     router.route("/job-tree/:jobid").get(handleJobTreeFetch);
     router.route("/query/jobs").post(handleJobsQuery);
     router.route("/work").get(handleNextJob);
+    router.route("/worker/register").post(handleWorkerRegistration);
     // Misc
     router.route("/time").get((req, res) => {
         res.send(

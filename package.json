@@ -52,10 +52,11 @@
     "prettier-check": "^2.0.0",
     "sinon": "^7.3.0",
     "supertest": "^4.0.2",
-    "vulpes": "^0.19.1"
+    "uuid": "^3.3.2",
+    "vulpes": "^0.24.0"
   },
   "peerDependencies": {
     "express": "4.*",
-    "vulpes": ">= 0.12.1 < 1"
+    "vulpes": ">= 0.24.0 < 1"
   }
 }

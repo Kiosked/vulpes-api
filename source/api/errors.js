@@ -38,6 +38,8 @@ function handleError(err, req, res /*, next */) {
             return outputError(400, "Bad Request", "Invalid job result update payload");
         case "ERR_JOB_ID_INVALID":
             return outputError(400, "Bad Request", "Provided job ID was invalid");
+        case "ERR_WORKER_ID_INVALID":
+            return outputError(400, "Bad Request", "Provided worker ID was invalid");
         case "ERR_JOB_NOT_FOUND":
             return outputError(404, "Not Found", "No job found");
         case "ERR_JOB_QUERY_OPTS_INVALID":
